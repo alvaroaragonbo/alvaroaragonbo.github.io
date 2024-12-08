@@ -1,8 +1,36 @@
-<html>
-    <header>
-    </header>
-    <body>
-        <h1>Hello World!</h1>
-        <a href="test.html">Go to test!</a>
-    </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Game Search</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #searchBar {
+            width: 300px;
+            padding: 10px;
+        }
+        #searchButton {
+            padding: 10px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Search for a Video Game</h1>
+    <input type="text" id="searchBar" placeholder="Enter game title...">
+    <button id="searchButton">Search</button>
+
+    <div id="result"></div>
+
+    <!-- Include the JavaScript file -->
+    <script src="script.js"></script>
+</body>
 </html>
