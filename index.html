@@ -1,41 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Riot Games Account Lookup</title>
-    <style>
-        /* Basic styling */
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-        }
-        #searchBar, #apiKeyInput {
-            width: 300px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        #searchButton {
-            padding: 10px 20px;
-        }
-        #result {
-            margin-top: 20px;
-            text-align: left;
-            display: inline-block;
-        }
-    </style>
+    <title>Riot Account Lookup</title>
 </head>
 <body>
+    <h1>Riot Account Lookup</h1>
+    <form id="lookupForm">
+        <label for="usernameTag">Enter Username#Tag:</label>
+        <input type="text" id="usernameTag" name="usernameTag" required>
+        <button type="submit">Lookup</button>
+    </form>
+    <pre id="result"></pre>
 
-    <h1>Riot Games Account Lookup</h1>
-    <input type="text" id="searchBar" placeholder="Enter Username#Tag..."><br>
-    <!-- Remove the API Key Input -->
-    <!-- <input type="password" id="apiKeyInput" placeholder="Enter API Key..."><br> -->
-    <button id="searchButton">Search</button>
+    <script>
+        document.getElementById('lookupForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const input = document.getElementById('usernameTag').value;
+            const [username, tag] = input.split('#');
 
-    <div id="result"></div>
+            if (!username || !tag) {
+                alert('Please enter in the format Username#Tag');
+                return;
+            }
 
-    <!-- Include the JavaScript file -->
-    <script src="script.js"></script>
+            try {
+                const response = await fetch('https://dvc3i33s71.execute-api.us-east-1.amazonaws.com/prod/lookup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, tag })
+                });
+
+                const data = await response.json();
+                document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').textContent = 'An error occurred while fetching data.';
+            }
+        });
+    </script>
 </body>
 </html>
