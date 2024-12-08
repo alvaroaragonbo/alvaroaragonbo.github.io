@@ -1,44 +1,58 @@
 // script.js
 
 document.getElementById('searchButton').addEventListener('click', function() {
-    var query = document.getElementById('searchBar').value;
-    if(query) {
-        searchGame(query);
+    const query = document.getElementById('searchBar').value.trim();
+
+    if (query) {
+        searchAccount(query);
     } else {
-        alert('Please enter a game title.');
+        alert('Please enter a Username#Tag.');
     }
 });
 
-function searchGame(query) {
-    let userInput = query("Enter your username with tag (e.g., Username#Tag):"); // Split the input into username and tag
-    let [username, tag] = userInput.split("#"); // Construct the URL with the provided API key 
-    let apiKey = "a"; 
-    let apiUrl = `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${username}/${tag}?api_key=${apiKey}`;
-    // Placeholder API URL - replace this with your actual API endpoint;
+function searchAccount(query) {
+    const parts = query.split('#');
+    if (parts.length !== 2) {
+        alert('Please enter the Username and Tag in the format Username#Tag.');
+        return;
+    }
 
-    // Fetch data from the API
+    const username = parts[0];
+    const tag = parts[1];
+
+    // Construct the API Gateway URL
+    const apiUrl = 'https://vboese1bxe.execute-api.us-east-1.amazonaws.com/prod/getaccount?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}';
+
+    // Clear previous result and display loading message
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = 'Loading...';
+
     fetch(apiUrl)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error ${response.status}: ${response.statusText}');
+            }
+            return response.json();
+        })
         .then(data => {
-            if(data.results && data.results.length > 0) {
-                displayResult(data.results[0]); // Display the first result
+            if (data.status && data.status.status_code !== 200) {
+                resultDiv.innerHTML = 'Error: ${data.status.message}';
             } else {
-                document.getElementById('result').innerHTML = 'No results found.';
+                displayResult(data);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            document.getElementById('result').innerHTML = 'An error occurred while fetching data.';
+            resultDiv.innerHTML = 'An error occurred: ${error.message}';
         });
 }
 
-function displayResult(game) {
-    // Display game information
-    var resultDiv = document.getElementById('result');
+function displayResult(account) {
+    const resultDiv = document.getElementById('result');
     resultDiv.innerHTML = `
-        <h2>${game.title}</h2>
-        <p>Release Date: ${game.release_date}</p>
-        <p>${game.description}</p>
-        <img src="${game.image_url}" alt="${game.title}" width="200">
-    `;
+        <h2>${account.gameName}#${account.tagLine}</h2>
+        <p><strong>PUUID:</strong> ${account.puuid}</p>
+        <p><strong>Game Name:</strong> ${account.gameName}</p>
+        <p><strong>Tag Line:</strong> ${account.tagLine}</p>
+    `;
 }

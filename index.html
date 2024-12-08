@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Video Game Search</title>
+    <title>Riot Games Account Lookup</title>
     <style>
         /* Basic styling */
         body {
@@ -10,22 +10,27 @@
             text-align: center;
             padding: 50px;
         }
-        #searchBar {
+        #searchBar, #apiKeyInput {
             width: 300px;
             padding: 10px;
+            margin-bottom: 10px;
         }
         #searchButton {
-            padding: 10px;
+            padding: 10px 20px;
         }
         #result {
             margin-top: 20px;
+            text-align: left;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 
-    <h1>Search for a Video Game</h1>
-    <input type="text" id="searchBar" placeholder="Enter game title...">
+    <h1>Riot Games Account Lookup</h1>
+    <input type="text" id="searchBar" placeholder="Enter Username#Tag..."><br>
+    <!-- Remove the API Key Input -->
+    <!-- <input type="password" id="apiKeyInput" placeholder="Enter API Key..."><br> -->
     <button id="searchButton">Search</button>
 
     <div id="result"></div>
