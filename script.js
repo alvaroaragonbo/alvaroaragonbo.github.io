@@ -10,8 +10,11 @@ document.getElementById('searchButton').addEventListener('click', function() {
 });
 
 function searchGame(query) {
-    // Placeholder API URL - replace this with your actual API endpoint
-    var apiUrl = 'https://api.example.com/games?search=' + encodeURIComponent(query);
+    let userInput = query("Enter your username with tag (e.g., Username#Tag):"); // Split the input into username and tag
+    let [username, tag] = userInput.split("#"); // Construct the URL with the provided API key 
+    let apiKey = "RGAPI-395dcf41-2e35-47ce-9d49-62a467233f59"; 
+    let apiUrl = `https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${username}/${tag}?api_key=${apiKey}`;
+    // Placeholder API URL - replace this with your actual API endpoint;
 
     // Fetch data from the API
     fetch(apiUrl)
